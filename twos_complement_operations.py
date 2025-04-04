@@ -1,3 +1,4 @@
+from bin_constants import BIN_LENGTH
 from conversion import decimal_to_binary_twos_complement
 
 
@@ -26,7 +27,7 @@ def summarize_in_twos_complement(number1: int, number2: int):
     binlist2 = list(binary2)
     binresult = []
     extra = 0
-    for i in range(7, -1, -1):
+    for i in range(BIN_LENGTH - 1, -1, -1):
         subtotal = int(binlist1[i]) + int(binlist2[i]) + extra
         binresult.insert(0, str(subtotal % 2))
         extra = subtotal // 2
@@ -40,7 +41,7 @@ def subtract_in_twos_complement(number1: int, number2: int):
     binlist2 = list(twos_complement_negation(binary2))
     binresult = []
     extra = 0
-    for i in range(7, -1, -1):
+    for i in range(BIN_LENGTH - 1, -1, -1):
         subtotal = int(binlist1[i]) + int(binlist2[i]) + extra
         binresult.append(str(subtotal % 2))
         extra = subtotal // 2

@@ -1,4 +1,5 @@
-from conversion import binary_to_decimal, IEEE754_0, float_to_ieee754
+from bin_constants import IEEE754_0, IEEE754_EXP_LENGTH, IEEE754_MANTISSA_LENGTH
+from conversion import binary_to_decimal, float_to_ieee754
 from usual_binary_operations import binary_greater_equal, subtract_in_usual_binary, binary_greater, \
     summarize_any_length_binary
 
@@ -13,10 +14,10 @@ def summarize_ieee754(number1, number2):
     elif binary1 == IEEE754_0:
         return binary2
 
-    exponent1 = binary1[1:9]
-    exponent2 = binary2[1:9]
-    mantissa1 = '1' + binary1[9:]
-    mantissa2 = '1' + binary2[9:]
+    exponent1 = binary1[1:IEEE754_EXP_LENGTH + 1]
+    exponent2 = binary2[1:IEEE754_EXP_LENGTH + 1]
+    mantissa1 = '1' + binary1[IEEE754_EXP_LENGTH + 1:]
+    mantissa2 = '1' + binary2[IEEE754_EXP_LENGTH + 1:]
 
     if exponent1 == exponent2 and binary_greater_equal(mantissa1, mantissa2):
         max_number = 1
@@ -40,4 +41,4 @@ def summarize_ieee754(number1, number2):
     if len(mantissa_sum) > len(max(mantissa1, mantissa2)):
         max_exponent = summarize_any_length_binary(max_exponent, '1')
 
-    return '0' + max_exponent.rjust(8, '0') + mantissa_sum[1:].ljust(23, '0')[:23]
+    return '0' + max_exponent.rjust(IEEE754_EXP_LENGTH, '0') + mantissa_sum[1:].ljust(IEEE754_MANTISSA_LENGTH, '0')[:IEEE754_MANTISSA_LENGTH]

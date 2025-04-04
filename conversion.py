@@ -1,4 +1,5 @@
-IEEE754_0 = '0' * 32
+from bin_constants import MAX_BIN, BIN_LENGTH, BIN_NEGATIVE_128, MIN_BIN, IEEE754_0, IEEE754_MANTISSA_LENGTH, \
+    IEEE754_NUMBER_LENGTH, IEEE754_EXP_LENGTH, IEEE754_EXP_BIAS
 
 
 def binary_to_decimal(number: str):
@@ -35,7 +36,7 @@ def binary_twos_complement_to_decimal(number: str):
 
 
 def decimal_to_binary(number: int):
-    if abs(number) > 127:
+    if abs(number) > MAX_BIN:
         raise ValueError
     sign = str(int(number < 0))
     number = abs(number)
@@ -43,7 +44,7 @@ def decimal_to_binary(number: int):
     while number > 0:
         binary_no_sign.append(str(number % 2))
         number = number // 2
-    return sign + ''.join(binary_no_sign)[::-1].zfill(7)
+    return sign + ''.join(binary_no_sign)[::-1].zfill(BIN_LENGTH-1)
 
 
 def decimal_to_binary_ones_complement(number: int):
@@ -56,8 +57,8 @@ def decimal_to_binary_ones_complement(number: int):
 
 
 def decimal_to_binary_twos_complement(number: int):
-    if number == -128:
-        return '10000000'
+    if number == MIN_BIN:
+        return BIN_NEGATIVE_128
     if number >= 0:
         return decimal_to_binary_ones_complement(number)
 
@@ -84,7 +85,7 @@ def float_to_ieee754(number: float) -> str:
     sign = str(int(number < 0))
     number = abs(number)
 
-    order = 127
+    order = MAX_BIN
     while number >= 2:
         number /= 2
         order += 1
@@ -101,7 +102,7 @@ def float_to_ieee754(number: float) -> str:
 
     mantissa = []
     number -= 1
-    for _ in range(23):
+    for _ in range(IEEE754_MANTISSA_LENGTH):
         number *= 2
         if number >= 1:
             mantissa.append('1')
@@ -113,12 +114,12 @@ def float_to_ieee754(number: float) -> str:
 
 
 def ieee754_to_float(number: str) -> float:
-    if len(number) != 32:
+    if len(number) != IEEE754_NUMBER_LENGTH:
         raise ValueError
     sign = -1 if number[0] == '1' else 1
-    exponent_bin = number[1:9]
-    mantissa_bin = number[9:]
+    exponent_bin = number[1:IEEE754_EXP_LENGTH+1]
+    mantissa_bin = number[IEEE754_EXP_LENGTH+1:]
 
-    exponent = binary_to_decimal('0' + exponent_bin) - 127
-    mantissa = binary_to_decimal('01' + mantissa_bin) / pow(2, 23)
+    exponent = binary_to_decimal('0' + exponent_bin) - IEEE754_EXP_BIAS
+    mantissa = binary_to_decimal('01' + mantissa_bin) / pow(2, IEEE754_MANTISSA_LENGTH)
     return sign * pow(2, exponent) * mantissa

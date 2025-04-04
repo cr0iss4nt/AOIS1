@@ -1,3 +1,4 @@
+from bin_constants import BIN_LENGTH
 from conversion import decimal_to_binary
 
 
@@ -28,8 +29,8 @@ def binary_multiply(number1: int, number2: int):
     binary2 = binary2[1:]
     result = [0] * 14
 
-    for i in range(6, -1, -1):
-        for j in range(6, -1, -1):
+    for i in range(BIN_LENGTH - 2, -1, -1):
+        for j in range(BIN_LENGTH - 2, -1, -1):
             mul = int(binary1[i]) * int(binary2[j])
             pos_low = i + j + 1
             pos_high = i + j
@@ -93,7 +94,7 @@ def binary_divide(number1: int, number2: int) -> str:
             else:
                 quotient2 += '0'
 
-    return sign + (quotient1.zfill(7) + quotient2)
+    return sign + (quotient1.zfill(BIN_LENGTH - 1) + quotient2)
 
 
 def summarize_any_length_binary(number1: str, number2: str):

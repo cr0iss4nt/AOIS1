@@ -1,3 +1,4 @@
+from bin_constants import MIN_BIN, MAX_BIN
 from conversion import decimal_to_binary, decimal_to_binary_ones_complement, decimal_to_binary_twos_complement, \
     binary_twos_complement_to_decimal, binary_to_decimal, ieee754_to_float
 from ieee754_operations import summarize_ieee754, float_to_ieee754
@@ -17,9 +18,9 @@ while True:
         case '1':
             try:
                 number = int(input("Введите целое десятичное число: "))
-                if not -128 <= number <= 127:
+                if not MIN_BIN <= number <= MAX_BIN:
                     raise ValueError
-                if number == -128:
+                if number == MIN_BIN:
                     print("Прямой код: -")
                     print("Обратный код: -")
                 else:
